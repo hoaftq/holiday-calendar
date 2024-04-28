@@ -1,4 +1,4 @@
-package hoaftq.holidaycalendar;
+package hoaftq.holidaycalendar.common;
 
 import org.joda.time.DateTime;
 

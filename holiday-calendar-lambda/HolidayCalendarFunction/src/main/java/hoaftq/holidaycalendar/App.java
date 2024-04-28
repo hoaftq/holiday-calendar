@@ -7,8 +7,10 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import hoaftq.holidaycalendar.sg.SgCalendarParser;
+import hoaftq.holidaycalendar.common.CalendarParserFactory;
+import hoaftq.holidaycalendar.common.GradeLevel;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +28,14 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
         headers.put("Content-Type", "application/json");
         headers.put("X-Custom-Header", "application/json");
 
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
-                .withHeaders(headers);
+        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
         try {
-            final var holidays = new SgCalendarParser().parse(List.of(GradeLevel.Primary));
+            final var request = objectMapper.readValue(input.getBody(), RequestDto.class);
+
+            var parser = new CalendarParserFactory().getCalendarParser(request.countryIsoCode());
+            var gradeLevels = getRequestGradleLevelsWithDefault(request);
+            var holidays = parser.parse(gradeLevels);
+
             return response
                     .withStatusCode(200)
                     .withBody(objectMapper.writeValueAsString(holidays));
@@ -39,5 +45,12 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
                     .withBody("{ message: Something went wrong. }")
                     .withStatusCode(500);
         }
+    }
+
+    private static List<GradeLevel> getRequestGradleLevelsWithDefault(RequestDto request) {
+        var requestGradleLevels = request.schoolGradleLevels();
+        return requestGradleLevels == null || requestGradleLevels.isEmpty()
+                ? Arrays.stream(GradeLevel.values()).toList()
+                : requestGradleLevels;
     }
 }

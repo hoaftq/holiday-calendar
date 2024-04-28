@@ -1,5 +1,5 @@
 {
-    "body": "{\"message\": \"hello world\"}",
+    "body": "{\"countryIsoCode\": \"SG\", \"schoolGradleLevels\": [\"Kindergarten\", \"Primary\"]}",
     "resource": "/{proxy+}",
     "path": "/path/to/resource",
     "httpMethod": "POST",

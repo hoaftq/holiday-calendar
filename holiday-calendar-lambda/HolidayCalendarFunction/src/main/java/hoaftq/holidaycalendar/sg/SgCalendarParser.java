@@ -3,6 +3,10 @@ package hoaftq.holidaycalendar.sg;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hoaftq.holidaycalendar.*;
+import hoaftq.holidaycalendar.common.CalendarParser;
+import hoaftq.holidaycalendar.common.GradeLevel;
+import hoaftq.holidaycalendar.common.Holiday;
+import hoaftq.holidaycalendar.common.HolidayType;
 import org.joda.time.DateTime;
 
 import javax.net.ssl.HttpsURLConnection;
