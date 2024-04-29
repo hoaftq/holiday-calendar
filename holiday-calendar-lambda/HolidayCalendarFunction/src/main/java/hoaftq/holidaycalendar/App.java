@@ -13,7 +13,6 @@ import hoaftq.holidaycalendar.common.GradeLevel;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Handler for requests to Lambda function.
@@ -24,11 +23,10 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
-        headers.put("X-Custom-Header", "application/json");
+        if ("OPTIONS".equals(input.getHttpMethod())) {
+            return createPreflightResponse();
+        }
 
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
         try {
             final var request = objectMapper.readValue(input.getBody(), RequestDto.class);
 
@@ -36,14 +34,10 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
             var gradeLevels = getRequestGradleLevelsWithDefault(request);
             var holidays = parser.parse(gradeLevels);
 
-            return response
-                    .withStatusCode(200)
-                    .withBody(objectMapper.writeValueAsString(holidays));
+            return createResponse(200, objectMapper.writeValueAsString(holidays));
         } catch (Exception e) {
             System.err.println(e);
-            return response
-                    .withBody("{ message: Something went wrong. }")
-                    .withStatusCode(500);
+            return createResponse(500, "{ message: Something went wrong. }");
         }
     }
 
@@ -52,5 +46,26 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
         return requestGradleLevels == null || requestGradleLevels.isEmpty()
                 ? Arrays.stream(GradeLevel.values()).toList()
                 : requestGradleLevels;
+    }
+
+    private static APIGatewayProxyResponseEvent createPreflightResponse() {
+        return new APIGatewayProxyResponseEvent()
+                .withStatusCode(204)
+                .withHeaders(new HashMap<>() {{
+                    put("Access-Control-Allow-Origin", "*");
+                    put("Access-Control-Allow-Methods", "POST");
+                    put("Access-Control-Allow-Headers", "*");
+                }});
+    }
+
+    private static APIGatewayProxyResponseEvent createResponse(int statusCode, String body) {
+        return new APIGatewayProxyResponseEvent()
+                .withStatusCode(statusCode)
+                .withBody(body)
+                .withHeaders(new HashMap<>() {{
+                    put("Content-Type", "application/json");
+                    put("X-Custom-Header", "application/json");
+                    put("Access-Control-Allow-Origin", "*");
+                }});
     }
 }
