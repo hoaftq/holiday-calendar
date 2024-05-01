@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HolidayCalendarService } from './holiday-calendar.service';
 import { CommonModule } from '@angular/common';
 import { CalendarComponent } from '../calendar/calendar.component';
-import { Holiday } from '../types/api-types';
+import { GradleLevel, Holiday } from '../types/api-types';
 import { EMPTY, Observable } from 'rxjs';
 
 @Component({
@@ -13,12 +13,16 @@ import { EMPTY, Observable } from 'rxjs';
   imports: [CommonModule, CalendarComponent],
 })
 export class HolidayCalendarComponent implements OnInit {
+  year = 2024;
   months = [...Array(12)].map((_, i) => i);
   holidays$: Observable<Holiday[]> = EMPTY;
 
   constructor(private service: HolidayCalendarService) {}
 
   ngOnInit(): void {
-    this.holidays$ = this.service.getHolidayData({ countryIsoCode: 'SG' });
+    this.holidays$ = this.service.getHolidayData({
+      countryIsoCode: 'SG',
+      schoolGradleLevels: [GradleLevel.Primary],
+    });
   }
 }

@@ -1,7 +1,12 @@
 @if (holidays$ | async; as holidays) {
-<div class="columns-4">
+<div class="text-center text-4xl font-extrabold text-slate-600 p-2">
+  {{ year }}
+</div>
+<div
+  class="grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1 justify-items-center align-items-center"
+>
   @for (m of months; track m) {
-  <app-calendar [year]="2024" [month]="m" [holidays]="holidays"></app-calendar>
+  <app-calendar [year]="year" [month]="m" [holidays]="holidays"></app-calendar>
   }
 </div>
-}
+} @else { Loading... }

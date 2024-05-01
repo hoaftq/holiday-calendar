@@ -1,5 +1,5 @@
 <table class="table-fixed w-40">
-  <caption class="caption-top bg-amber-500 font-bold uppercase">
+  <caption class="caption-top bg-slate-600 text-white font-bold uppercase">
     {{
       monthName
     }}
@@ -8,6 +8,7 @@
     <tr>
       @for (d of daysOfWeekNames; track d; let i = $index) {
       <th
+        class="text-center"
         [ngClass]="{
           'text-red-700': i === 0
         }"
@@ -22,11 +23,12 @@
     <tr>
       @for (day of week; track day; let i= $index) {
       <td
-        class="font-semibold"
+        class="font-semibold text-center"
         [ngClass]="{
           'text-red-700': i === 0,
-          'bg-orange-400': day.type?.isPublicHoliday,
-          'bg-yellow-400': day.type?.isSchoolHoliday
+          'text-white': day.type?.isPublicHoliday,
+          'bg-orange-600': day.type?.isPublicHoliday,
+          'bg-amber-200': day.type?.isSchoolHoliday
         }"
       >
         {{ day.dayOfMonth }}
