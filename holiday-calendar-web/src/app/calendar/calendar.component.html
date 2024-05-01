@@ -1,1 +1,38 @@
-<p class="text-3xl font-bold underline">calendar works!</p>
+<table class="table-fixed w-40">
+  <caption class="caption-top bg-amber-500 font-bold uppercase">
+    {{
+      monthName
+    }}
+  </caption>
+  <thead>
+    <tr>
+      @for (d of daysOfWeekNames; track d; let i = $index) {
+      <th
+        [ngClass]="{
+          'text-red-700': i === 0
+        }"
+      >
+        {{ d }}
+      </th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (week of weeks; track week;) {
+    <tr>
+      @for (day of week; track day; let i= $index) {
+      <td
+        class="font-semibold"
+        [ngClass]="{
+          'text-red-700': i === 0,
+          'bg-orange-400': day.type?.isPublicHoliday,
+          'bg-yellow-400': day.type?.isSchoolHoliday
+        }"
+      >
+        {{ day.dayOfMonth }}
+      </td>
+      }
+    </tr>
+    }
+  </tbody>
+</table>

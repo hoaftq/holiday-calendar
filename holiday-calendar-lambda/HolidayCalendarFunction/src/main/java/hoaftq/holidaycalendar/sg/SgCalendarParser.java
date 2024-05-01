@@ -2,17 +2,17 @@ package hoaftq.holidaycalendar.sg;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hoaftq.holidaycalendar.*;
+import hoaftq.holidaycalendar.Utils;
 import hoaftq.holidaycalendar.common.CalendarParser;
 import hoaftq.holidaycalendar.common.GradeLevel;
 import hoaftq.holidaycalendar.common.Holiday;
 import hoaftq.holidaycalendar.common.HolidayType;
-import org.joda.time.DateTime;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 public class SgCalendarParser implements CalendarParser {
@@ -66,11 +66,11 @@ public class SgCalendarParser implements CalendarParser {
     private static Holiday mapEventToHoliday(Event event) {
         var holidayType = isPublicHoliday(event.category().slug()) ? HolidayType.PublicHoliday : HolidayType.SchoolHoliday;
         var gradeLevels = getGradeLevels(event);
-        var startDate = DateTime.parse(event.start());
+        var startDate = LocalDate.parse(event.start());
 
-        DateTime endDate = null;
+        LocalDate endDate = null;
         if (!event.end().isEmpty()) {
-            endDate = DateTime.parse(event.end());
+            endDate = LocalDate.parse(event.end());
         }
 
         return new Holiday(holidayType, gradeLevels, event.title(), startDate, endDate);

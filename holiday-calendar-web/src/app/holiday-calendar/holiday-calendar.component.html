@@ -1,4 +1,7 @@
-@if (holidayData$ | async; as holidayData) {
-{{holidayData | json}}
+@if (holidays$ | async; as holidays) {
+<div class="columns-4">
+  @for (m of months; track m) {
+  <app-calendar [year]="2024" [month]="m" [holidays]="holidays"></app-calendar>
+  }
+</div>
 }
-<app-calendar></app-calendar>

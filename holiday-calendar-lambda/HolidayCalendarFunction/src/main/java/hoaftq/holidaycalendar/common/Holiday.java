@@ -1,14 +1,13 @@
 package hoaftq.holidaycalendar.common;
 
-import org.joda.time.DateTime;
-
+import java.time.LocalDate;
 import java.util.List;
 
 public record Holiday(
         HolidayType type,
         List<GradeLevel> gradeLevels,
         String name,
-        DateTime from,
-        DateTime to
+        LocalDate from,
+        LocalDate to
 ) {
 }
