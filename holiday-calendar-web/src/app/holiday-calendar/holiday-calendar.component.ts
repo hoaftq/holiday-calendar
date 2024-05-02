@@ -4,13 +4,14 @@ import { CommonModule } from '@angular/common';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { GradleLevel, Holiday } from '../types/api-types';
 import { EMPTY, Observable } from 'rxjs';
+import { PublicHolidaysComponent } from '../public-holidays/public-holidays.component';
 
 @Component({
   selector: 'app-holiday-calendar',
   standalone: true,
   templateUrl: './holiday-calendar.component.html',
   styleUrl: './holiday-calendar.component.scss',
-  imports: [CommonModule, CalendarComponent],
+  imports: [CommonModule, CalendarComponent, PublicHolidaysComponent],
 })
 export class HolidayCalendarComponent implements OnInit {
   year = 2024;

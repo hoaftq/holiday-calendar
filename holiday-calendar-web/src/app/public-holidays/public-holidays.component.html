@@ -1,0 +1,17 @@
+<div class="p-4 bg-slate-100">
+  <div class="font-bold text-xl pb-1">Public holidays</div>
+  <div class="md:columns-2 lg:columns-3 gap-8 font-semibold">
+    @for (day of publicHolidays; track $index) {
+    <div class="py-1 flex items-center">
+      <span class="flex-1">{{ day.name }}</span>
+      <span class="flex-1">
+        @if (day.to) {
+        {{ day.from | date : "MMM d" }} - {{ day.to | date : "MMM d" }}
+        }@else {
+        {{ day.from | date : "MMM d" }}
+        }
+      </span>
+    </div>
+    }
+  </div>
+</div>
