@@ -15,6 +15,11 @@ Globals:
   Api:
     TracingEnabled: true
 Resources:
+  HolidayCalendarApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+
   HolidayCalendarFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -30,18 +35,17 @@ Resources:
           Properties:
             Path: /holiday-calendar
             Method: any
+            RestApiId: !Ref HolidayCalendarApi
+
     Metadata:
       DockerTag: java21-maven-v1
       DockerContext: ./HolidayCalendarFunction
       Dockerfile: Dockerfile
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   HolidayCalendarApi:
     Description: API Gateway endpoint URL for Prod stage for Holiday Calendar function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/holiday-calendar/"
+    Value: !Sub "https://${HolidayCalendarApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/holiday-calendar/"
   HolidayCalendarFunction:
     Description: Holiday Calendar Lambda Function ARN
     Value: !GetAtt HolidayCalendarFunction.Arn

@@ -29,3 +29,12 @@ warm_containers = "EAGER"
 
 [default.local_start_lambda.parameters]
 warm_containers = "EAGER"
+
+[prod.deploy.parameters]
+stack_name = "holiday-calendar-lambda"
+resolve_s3 = true
+s3_prefix = "holiday-calendar-lambda"
+resolve_image_repos = true
+region = "ap-southeast-1"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
