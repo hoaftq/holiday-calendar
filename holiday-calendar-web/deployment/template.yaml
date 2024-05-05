@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  HolidayCalendarApplication:
+    Type: AWS::ElasticBeanstalk::Application
+    Properties:
+      ApplicationName: holiday-calendar-web
+      Description: Holiday calendar web app
+  HolidayCalendarApplicationVersion:
+    Type: AWS::ElasticBeanstalk::ApplicationVersion
+    Properties:
+      Description: Holiday calendar web application version
+      ApplicationName: !Ref HolidayCalendarApplication
+      SourceBundle:
+        S3Bucket: !Sub elasticbeanstalk-holiday-calendar-${AWS::Region}
+        S3Key: holiday-calendar-web.zip
+  HolidayCalendarApplicationConfigurationTemplate:
+    Type: AWS::ElasticBeanstalk::ConfigurationTemplate
+    Properties:
+      Description: Holiday calendar web application configuration template
+      ApplicationName: !Ref HolidayCalendarApplication
+      SolutionStackName: 64bit Amazon Linux 2023 v6.1.4 running Node.js 20
+      OptionSettings: # https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options.html
+        - Namespace: aws:elasticbeanstalk:environment
+          OptionName: EnvironmentType
+          Value: SingleInstance
+        - Namespace: aws:ec2:instances
+          OptionName: EnableSpot
+          Value: true
+        - Namespace: aws:ec2:instances
+          OptionName: InstanceTypes
+          Value: t3.micro, t3.small
+        - Namespace: aws:ec2:instances
+          OptionName: SpotMaxPrice
+          Value: 0.003
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: IamInstanceProfile
+          Value: !Ref HolidayCalendarProfile
+  HolidayCalendarRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Description: Beanstalk EC2 role
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier
+  HolidayCalendarProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref HolidayCalendarRole
+  HolidayCalendarApplicationEnvironment:
+    Type: AWS::ElasticBeanstalk::Environment
+    Properties:
+      Description: Holiday calendar environment
+      EnvironmentName: holiday-calendar-web
+      ApplicationName: !Ref HolidayCalendarApplication
+      TemplateName: !Ref HolidayCalendarApplicationConfigurationTemplate
+      VersionLabel: !Ref HolidayCalendarApplicationVersion
+      Tags:
+        - Key: Project
+          Value: holiday-calendar
