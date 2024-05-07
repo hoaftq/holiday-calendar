@@ -9,3 +9,4 @@ For running locally, refer to README in the subforders.
  - [ ] Improving UI:  add missing info, make it a bit dynamic, support different styles
  - [ ] Support other countries
  - [ ] Integrating Luna calendar
+ - [ ] Storing data in database, especially with unstable and unreliable sources
