@@ -1,7 +1,13 @@
 @if (holidays$ | async; as holidays) {
-<div class="text-center text-4xl font-extrabold text-slate-600 p-2">
-  {{ year }}
+<div class="flex flex-row w-full">
+  <div
+    class="text-center text-4xl font-extrabold text-slate-600 py-2 pl-40 grow"
+  >
+    {{ year }}
+  </div>
+  <div class="w-40 self-center text-slate-600">{{ country }} caleandar</div>
 </div>
+
 <div
   class="grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1 justify-items-center align-items-center"
 >
@@ -9,7 +15,17 @@
   <app-calendar [year]="year" [month]="m" [holidays]="holidays"></app-calendar>
   }
 </div>
-<div class="mt-4">
-  <app-public-holidays [holidays]="holidays"></app-public-holidays>
-</div>
-} @else { Loading... }
+
+<app-holiday-legend
+  [legendEntries]="legendEntries"
+  class="float-right my-3 mr-2"
+></app-holiday-legend>
+
+<app-public-holidays
+  [holidays]="holidays"
+  class="clear-right block"
+></app-public-holidays>
+
+} @else {
+<div class="text-center font-bold mt-5">Loading...</div>
+}

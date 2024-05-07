@@ -1,0 +1,8 @@
+<div class="flex flex-row gap-4">
+  @for (entry of legendEntries; track $index) {
+  <div class="flex gap-2 items-center py-1">
+    <div [ngClass]="['size-4', entry.color]"></div>
+    <div>{{ entry.label }}</div>
+  </div>
+  }
+</div>
