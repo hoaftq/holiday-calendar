@@ -21,7 +21,7 @@ export class HolidayCalendarComponent implements OnInit {
   legendEntries: LegendEntry[] = [
     {
       label: 'Public holidays',
-      color: 'bg-orange-600'
+      color: 'bg-orange-700'
     },
     {
       label: 'School holidays',
