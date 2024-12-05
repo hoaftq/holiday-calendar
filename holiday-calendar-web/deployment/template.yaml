@@ -31,7 +31,7 @@ Resources:
           Value: t3.micro, t3.small
         - Namespace: aws:ec2:instances
           OptionName: SpotMaxPrice
-          Value: 0.003
+          Value: 0.011
         - Namespace: aws:autoscaling:launchconfiguration
           OptionName: IamInstanceProfile
           Value: !Ref HolidayCalendarProfile
