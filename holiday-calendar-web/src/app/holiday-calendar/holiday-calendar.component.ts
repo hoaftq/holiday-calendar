@@ -15,7 +15,7 @@ import { HolidayLegendComponent, LegendEntry } from "../holiday-legend/holiday-l
   imports: [CommonModule, CalendarComponent, PublicHolidaysComponent, HolidayLegendComponent]
 })
 export class HolidayCalendarComponent implements OnInit {
-  year = 2024;
+  year = new Date().getFullYear();
   months = [...Array(12)].map((_, i) => i);
   holidays$: Observable<Holiday[]> = EMPTY;
   legendEntries: LegendEntry[] = [
